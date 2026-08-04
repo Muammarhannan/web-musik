@@ -1,33 +1,34 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { PlusCircle, Trash2, Music4, GripVertical } from "lucide-react";
-
-type PlaylistItem = {
-  id: string;
-  title: string;
-  artist: string;
-};
-
-const initialPlaylists: PlaylistItem[] = [
-  { id: "1", title: "Night Drive", artist: "Liora" },
-  { id: "2", title: "Aurora Focus", artist: "Aster" },
-];
+import { readPlaylists, writePlaylists, type PlaylistItem } from "@/lib/local-library";
 
 export function PlaylistPanel() {
-  const [playlists, setPlaylists] = useState(initialPlaylists);
+  const [playlists, setPlaylists] = useState<PlaylistItem[]>([]);
   const [draft, setDraft] = useState("");
+
+  useEffect(() => {
+    const persisted = readPlaylists();
+    if (persisted.length > 0) {
+      setPlaylists(persisted);
+    }
+  }, []);
 
   const totalDuration = useMemo(() => playlists.length * 3 + 8, [playlists.length]);
 
   function addPlaylist() {
     if (!draft.trim()) return;
-    setPlaylists((current) => [...current, { id: crypto.randomUUID(), title: draft.trim(), artist: "You" }]);
+    const next = [...playlists, { id: crypto.randomUUID(), title: draft.trim(), artist: "You", createdAt: new Date().toISOString() }];
+    setPlaylists(next);
+    writePlaylists(next);
     setDraft("");
   }
 
   function removePlaylist(id: string) {
-    setPlaylists((current) => current.filter((item) => item.id !== id));
+    const next = playlists.filter((item) => item.id !== id);
+    setPlaylists(next);
+    writePlaylists(next);
   }
 
   return (

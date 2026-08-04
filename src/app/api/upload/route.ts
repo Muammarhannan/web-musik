@@ -22,6 +22,7 @@ export async function POST(request: NextRequest) {
     await writeFile(filePath, buffer);
 
     const fileType = file.type.startsWith("audio/") ? "audio" : file.type.startsWith("image/") ? "image" : "text";
+    const previewText = fileType === "text" ? await file.text() : undefined;
 
     return Response.json({
       ok: true,
@@ -31,6 +32,7 @@ export async function POST(request: NextRequest) {
         type: fileType,
         url: `/uploads/${filename}`,
         size: file.size,
+        previewText,
       },
     });
   } catch (error) {

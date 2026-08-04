@@ -1,24 +1,31 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Sparkles } from "lucide-react";
+import { parseLyrics, readUploads } from "@/lib/local-library";
 
 type LyricLine = {
   time: number;
   text: string;
 };
 
-const lines: LyricLine[] = [
-  { time: 0, text: "A glow in the dark" },
-  { time: 4, text: "A pulse beneath the city" },
-  { time: 8, text: "We move like light" },
-  { time: 12, text: "Softly into midnight" },
-];
-
 export function LyricPanel() {
+  const [lines, setLines] = useState<LyricLine[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
 
-  const activeLine = useMemo(() => lines[currentIndex] ?? lines[0], [currentIndex]);
+  useEffect(() => {
+    const uploads = readUploads();
+    const lyricItem = uploads.find((item) => item.type === "text");
+    if (!lyricItem) {
+      setLines([]);
+      return;
+    }
+
+    const content = lyricItem.previewText ?? lyricItem.name;
+    setLines(parseLyrics(content));
+  }, []);
+
+  const activeLine = useMemo(() => lines[currentIndex] ?? lines[0], [currentIndex, lines]);
 
   return (
     <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
@@ -37,20 +44,26 @@ export function LyricPanel() {
           </div>
         </div>
 
-        <div className="space-y-3">
-          {lines.map((line, index) => (
-            <div key={line.text} className={`rounded-2xl px-4 py-3 text-lg font-medium transition ${index === currentIndex ? "bg-white/15 text-white shadow-lg shadow-cyan-500/10" : "bg-black/20 text-zinc-400"}`}>
-              {line.text}
+        {lines.length > 0 ? (
+          <>
+            <div className="space-y-3">
+              {lines.map((line, index) => (
+                <div key={`${line.text}-${index}`} className={`rounded-2xl px-4 py-3 text-lg font-medium transition ${index === currentIndex ? "bg-white/15 text-white shadow-lg shadow-cyan-500/10" : "bg-black/20 text-zinc-400"}`}>
+                  {line.text}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
 
-        <div className="mt-6 flex justify-center gap-2">
-          <button onClick={() => setCurrentIndex((value) => Math.max(0, value - 1))} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">Previous</button>
-          <button onClick={() => setCurrentIndex((value) => (value + 1) % lines.length)} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">Next</button>
-        </div>
+            <div className="mt-6 flex justify-center gap-2">
+              <button onClick={() => setCurrentIndex((value) => Math.max(0, value - 1))} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">Previous</button>
+              <button onClick={() => setCurrentIndex((value) => (value + 1) % lines.length)} className="rounded-full border border-white/10 bg-white/5 px-4 py-2 text-sm text-zinc-300">Next</button>
+            </div>
 
-        <p className="mt-4 text-sm text-cyan-200">Now: {activeLine.text}</p>
+            <p className="mt-4 text-sm text-cyan-200">Now: {activeLine?.text}</p>
+          </>
+        ) : (
+          <p className="text-sm text-zinc-400">Upload a lyric file to see synchronized lines here.</p>
+        )}
       </div>
     </div>
   );

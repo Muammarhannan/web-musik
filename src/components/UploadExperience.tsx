@@ -2,14 +2,9 @@
 
 import { ChangeEvent, DragEvent, useEffect, useMemo, useState } from "react";
 import { CheckCircle2, ImageIcon, Music4, UploadCloud, FileText, LoaderCircle } from "lucide-react";
+import { getAudioItems, readUploads, writeUploads, type LibraryItem } from "@/lib/local-library";
 
-type UploadItem = {
-  id: string;
-  name: string;
-  type: "audio" | "image" | "text";
-  url: string;
-  size: number;
-};
+type UploadItem = LibraryItem;
 
 const maxSizeBytes = 15 * 1024 * 1024;
 const acceptedTypes = {
@@ -44,6 +39,12 @@ export function UploadExperience() {
   const [errors, setErrors] = useState<string[]>([]);
 
   useEffect(() => {
+    const stored = readUploads();
+    if (stored.length > 0) {
+      setUploads(stored);
+      return;
+    }
+
     void loadUploads();
   }, []);
 
@@ -51,7 +52,9 @@ export function UploadExperience() {
     const response = await fetch("/api/uploads");
     if (!response.ok) return;
     const data = (await response.json()) as { files: UploadItem[] };
-    setUploads(data.files);
+    const normalized = data.files.map((item) => ({ ...item, createdAt: item.createdAt ?? new Date().toISOString() }));
+    setUploads(normalized);
+    writeUploads(normalized);
   }
 
   async function uploadFiles(files: File[]) {
@@ -94,7 +97,15 @@ export function UploadExperience() {
         continue;
       }
       if (payload.file) {
-        setUploads((current) => [payload.file as UploadItem, ...current]);
+        const nextItem: UploadItem = {
+          ...(payload.file as UploadItem),
+          createdAt: new Date().toISOString(),
+        };
+        setUploads((current) => {
+          const next = [nextItem, ...current];
+          writeUploads(next);
+          return next;
+        });
       }
       setProgress(Math.min(100, Math.round(((index + 1) / validFiles.length) * 100)));
     }
@@ -125,6 +136,8 @@ export function UploadExperience() {
       text: uploads.filter((item) => item.type === "text").length,
     };
   }, [uploads]);
+
+  const audioItems = useMemo(() => getAudioItems(uploads), [uploads]);
 
   return (
     <div className="space-y-6">
@@ -200,6 +213,12 @@ export function UploadExperience() {
       </div>
 
       <div className="grid gap-4 xl:grid-cols-2">
+        {audioItems.length > 0 ? (
+          <div className="rounded-3xl border border-cyan-400/20 bg-cyan-400/10 p-4 xl:col-span-2">
+            <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Ready to play</p>
+            <p className="mt-2 text-white">{audioItems[0].name} is ready in your local library.</p>
+          </div>
+        ) : null}
         {uploads.map((item) => (
           <div key={item.id} className="rounded-3xl border border-white/10 bg-zinc-950/70 p-4 backdrop-blur-xl">
             <div className="flex items-start justify-between gap-3">

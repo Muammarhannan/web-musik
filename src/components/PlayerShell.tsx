@@ -2,6 +2,7 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward, Repeat2, Shuffle, Volume2, ListMusic, Maximize2 } from "lucide-react";
+import { getAudioItems, parseLyrics, readUploads, type LibraryItem } from "@/lib/local-library";
 
 type Track = {
   id: string;
@@ -9,31 +10,32 @@ type Track = {
   artist: string;
   cover: string;
   audio: string;
+  lyrics?: string;
 };
 
-const demoTracks: Track[] = [
-  {
-    id: "1",
-    title: "Midnight Pulse",
-    artist: "Liora",
-    cover: "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80",
-    audio: "/uploads/demo.mp3",
-  },
-  {
-    id: "2",
-    title: "Neon Drift",
-    artist: "Aster",
-    cover: "https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?auto=format&fit=crop&w=900&q=80",
-    audio: "/uploads/demo-2.mp3",
-  },
-];
+const fallbackCover = "https://images.unsplash.com/photo-1516280440614-37939bbacd81?auto=format&fit=crop&w=900&q=80";
 
 export function PlayerShell() {
-  const [tracks] = useState(demoTracks);
+  const [tracks, setTracks] = useState<Track[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
   const [volume, setVolume] = useState(0.8);
+
+  useEffect(() => {
+    const uploads = readUploads();
+    const audioItems = getAudioItems(uploads);
+    const nextTracks = audioItems.map((item, index) => ({
+      id: item.id,
+      title: item.name.replace(/\.[^/.]+$/, ""),
+      artist: "Local Library",
+      cover: fallbackCover,
+      audio: item.url,
+      lyrics: item.previewText ?? "",
+    }));
+
+    setTracks(nextTracks.length > 0 ? nextTracks : []);
+  }, []);
 
   const activeTrack = useMemo(() => tracks[currentIndex] ?? tracks[0], [currentIndex, tracks]);
 
@@ -66,6 +68,15 @@ export function PlayerShell() {
       audio.removeEventListener("timeupdate", refresh);
     };
   }, [tracks.length, activeTrack]);
+
+  if (!activeTrack) {
+    return (
+      <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+        <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Player</p>
+        <h3 className="mt-2 text-xl font-semibold text-white">Upload a track to start playback.</h3>
+      </div>
+    );
+  }
 
   return (
     <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl">

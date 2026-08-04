@@ -1,5 +1,7 @@
+import { LyricPanel } from "@/components/LyricPanel";
 import { PlayerShell } from "@/components/PlayerShell";
 import { PlaylistPanel } from "@/components/PlaylistPanel";
+import { VisualizerPanel } from "@/components/VisualizerPanel";
 
 export default function PlayerPage() {
   return (
@@ -12,6 +14,10 @@ export default function PlayerPage() {
     >
       <div className="mx-auto flex max-w-6xl flex-col gap-6">
         <PlayerShell />
+        <div className="grid gap-6 xl:grid-cols-[1.2fr_0.8fr]">
+          <LyricPanel />
+          <VisualizerPanel />
+        </div>
         <PlaylistPanel />
       </div>
     </main>

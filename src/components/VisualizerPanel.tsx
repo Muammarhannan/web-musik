@@ -24,7 +24,7 @@ export function VisualizerPanel() {
   })), [energy]);
 
   return (
-    <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
+    <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Visualizer</p>
@@ -39,11 +39,11 @@ export function VisualizerPanel() {
         </div>
       </div>
 
-      <div className="mt-6 rounded-[28px] border border-white/10 bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 p-6">
+      <div className="mt-6 rounded-3xl border border-white/10 bg-linear-to-br from-cyan-500/10 to-fuchsia-500/10 p-6">
         {mode === "bars" ? (
           <div className="flex h-48 items-end justify-between gap-2">
             {bars.map((bar) => (
-              <div key={bar.id} className="w-full rounded-full bg-gradient-to-t from-cyan-400 to-fuchsia-500" style={{ height: bar.height }} />
+              <div key={bar.id} className="w-full rounded-full bg-linear-to-t from-cyan-400 to-fuchsia-500" style={{ height: bar.height }} />
             ))}
           </div>
         ) : null}
@@ -59,7 +59,7 @@ export function VisualizerPanel() {
         ) : null}
 
         {mode === "aurora" ? (
-          <div className="relative h-48 overflow-hidden rounded-[24px] border border-white/10 bg-black/20">
+          <div className="relative h-48 overflow-hidden rounded-3xl border border-white/10 bg-black/20">
             <div className="absolute left-[-10%] top-10 h-28 w-28 rounded-full bg-cyan-400/40 blur-3xl" style={{ transform: `scale(${0.8 + energy})` }} />
             <div className="absolute bottom-[-10%] right-[-10%] h-36 w-36 rounded-full bg-fuchsia-500/40 blur-3xl" style={{ transform: `scale(${0.7 + energy})` }} />
             <div className="absolute inset-0 flex items-center justify-center text-cyan-100">

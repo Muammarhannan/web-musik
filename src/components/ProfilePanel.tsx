@@ -10,10 +10,10 @@ const stats = [
 
 export function ProfilePanel() {
   return (
-    <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
+    <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-4">
-          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-br from-cyan-400 to-fuchsia-500 text-white">
+          <div className="flex h-16 w-16 items-center justify-center rounded-full bg-linear-to-br from-cyan-400 to-fuchsia-500 text-white">
             <UserRound className="h-8 w-8" />
           </div>
           <div>
@@ -35,7 +35,7 @@ export function ProfilePanel() {
         {stats.map((stat) => {
           const Icon = stat.icon;
           return (
-            <div key={stat.label} className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+            <div key={stat.label} className="rounded-3xl border border-white/10 bg-white/5 p-4">
               <div className="flex items-center gap-2 text-cyan-300">
                 <Icon className="h-4 w-4" />
                 <span className="text-sm">{stat.label}</span>

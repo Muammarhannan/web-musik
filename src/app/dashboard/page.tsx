@@ -20,7 +20,7 @@ const featuredSongs = [
 
 export default function DashboardPage() {
   return (
-    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(255,255,255,0.08),_transparent_30%),linear-gradient(135deg,_#06070b_0%,_#0f1424_100%)] p-6 text-zinc-100">
+    <main className="min-h-screen bg-[radial-gradient(circle_at_top_left,rgba(255,255,255,0.08),transparent_30%),linear-gradient(135deg,#06070b_0%,#0f1424_100%)] p-6 text-zinc-100">
       <div className="mx-auto flex max-w-7xl flex-col gap-6 lg:flex-row">
         <aside className="w-full rounded-3xl border border-white/10 bg-white/10 p-5 shadow-2xl shadow-cyan-950/30 backdrop-blur-xl lg:w-72">
           <div className="mb-8 flex items-center gap-3">
@@ -46,21 +46,21 @@ export default function DashboardPage() {
         </aside>
 
         <section className="flex-1 space-y-6">
-          <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 shadow-2xl shadow-black/40 backdrop-blur-2xl">
+          <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 shadow-2xl shadow-black/40 backdrop-blur-2xl">
             <div className="flex flex-col gap-4 md:flex-row md:items-end md:justify-between">
               <div>
                 <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Now feeling</p>
                 <h1 className="text-4xl font-semibold text-white">Immersive soundscapes</h1>
                 <p className="mt-2 max-w-2xl text-sm text-zinc-400">A cinematic music experience with animated lyrics, live visuals, and an elegant personal library.</p>
               </div>
-              <button className="rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-5 py-3 text-sm font-medium text-black transition hover:scale-[1.02]">
+              <button className="rounded-full bg-linear-to-r from-cyan-400 to-fuchsia-500 px-5 py-3 text-sm font-medium text-black transition hover:scale-[1.02]">
                 Start listening
               </button>
             </div>
           </div>
 
           <div className="grid gap-6 xl:grid-cols-[1.3fr_0.7fr]">
-            <div className="rounded-[32px] border border-white/10 bg-zinc-950/60 p-6 backdrop-blur-xl">
+            <div className="rounded-4xl border border-white/10 bg-zinc-950/60 p-6 backdrop-blur-xl">
               <div className="mb-4 flex items-center justify-between">
                 <h2 className="text-xl font-semibold">Featured tracks</h2>
                 <button className="text-sm text-cyan-400">View all</button>
@@ -81,12 +81,12 @@ export default function DashboardPage() {
               </div>
             </div>
 
-            <div className="rounded-[32px] border border-white/10 bg-gradient-to-br from-cyan-500/20 to-fuchsia-500/20 p-6 backdrop-blur-xl">
+            <div className="rounded-4xl border border-white/10 bg-linear-to-br from-cyan-500/20 to-fuchsia-500/20 p-6 backdrop-blur-xl">
               <p className="text-sm uppercase tracking-[0.3em] text-cyan-300">Live visualizer</p>
-              <div className="mt-6 h-44 rounded-[24px] border border-white/10 bg-zinc-950/60 p-4">
+              <div className="mt-6 h-44 rounded-3xl border border-white/10 bg-zinc-950/60 p-4">
                 <div className="flex h-full items-end justify-between gap-2">
                   {Array.from({ length: 24 }).map((_, index) => (
-                    <div key={index} className="w-full rounded-full bg-gradient-to-t from-cyan-400 to-fuchsia-500" style={{ height: `${25 + ((index * 13) % 60)}%` }} />
+                    <div key={index} className="w-full rounded-full bg-linear-to-t from-cyan-400 to-fuchsia-500" style={{ height: `${25 + ((index * 13) % 60)}%` }} />
                   ))}
                 </div>
               </div>

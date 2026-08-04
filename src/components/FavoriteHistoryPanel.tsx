@@ -15,7 +15,7 @@ const history = [
 export function FavoriteHistoryPanel() {
   return (
     <div className="grid gap-6 xl:grid-cols-2">
-      <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
+      <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
         <div className="flex items-center gap-2 text-cyan-300">
           <Heart className="h-5 w-5" />
           <h3 className="text-xl font-semibold text-white">Favorites</h3>
@@ -33,7 +33,7 @@ export function FavoriteHistoryPanel() {
         </div>
       </div>
 
-      <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
+      <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
         <div className="flex items-center gap-2 text-cyan-300">
           <History className="h-5 w-5" />
           <h3 className="text-xl font-semibold text-white">Listening history</h3>

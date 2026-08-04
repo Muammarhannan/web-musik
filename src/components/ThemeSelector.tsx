@@ -9,7 +9,7 @@ export function ThemeSelector() {
   const [activeTheme, setActiveTheme] = useState("Midnight");
 
   return (
-    <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
+    <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
       <div className="flex items-center gap-2 text-cyan-300">
         <Palette className="h-5 w-5" />
         <h3 className="text-xl font-semibold text-white">Theme</h3>

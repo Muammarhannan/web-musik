@@ -21,7 +21,7 @@ export function LyricPanel() {
   const activeLine = useMemo(() => lines[currentIndex] ?? lines[0], [currentIndex]);
 
   return (
-    <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
+    <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Lyrics</p>
@@ -30,7 +30,7 @@ export function LyricPanel() {
         <div className="rounded-full border border-white/10 bg-white/5 px-3 py-2 text-sm text-zinc-300">Live mode</div>
       </div>
 
-      <div className="mt-6 rounded-[28px] border border-white/10 bg-gradient-to-br from-cyan-500/10 to-fuchsia-500/10 p-6 text-center">
+      <div className="mt-6 rounded-3xl border border-white/10 bg-linear-to-br from-cyan-500/10 to-fuchsia-500/10 p-6 text-center">
         <div className="mb-5 flex justify-center">
           <div className="rounded-full border border-white/10 bg-white/10 p-3 text-cyan-200">
             <Sparkles className="h-5 w-5" />

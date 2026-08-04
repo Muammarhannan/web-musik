@@ -128,7 +128,7 @@ export function UploadExperience() {
 
   return (
     <div className="space-y-6">
-      <div className="rounded-[28px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-xl">
+      <div className="rounded-3xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-xl">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
           <div>
             <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Upload studio</p>
@@ -147,14 +147,14 @@ export function UploadExperience() {
           }}
           onDragLeave={() => setIsDragging(false)}
           onDrop={onDrop}
-          className={`mt-6 rounded-[24px] border border-dashed p-8 text-center transition ${isDragging ? "border-cyan-400 bg-cyan-500/10" : "border-white/15 bg-white/5"}`}
+          className={`mt-6 rounded-3xl border border-dashed p-8 text-center transition ${isDragging ? "border-cyan-400 bg-cyan-500/10" : "border-white/15 bg-white/5"}`}
         >
           <div className="mx-auto flex w-fit items-center justify-center rounded-full bg-cyan-500/10 p-4 text-cyan-300">
             <UploadCloud className="h-7 w-7" />
           </div>
           <p className="mt-4 text-lg font-medium text-white">{message}</p>
           <p className="mt-2 text-sm text-zinc-400">MP3, WAV, FLAC, PNG, JPG, WEBP, LRC, TXT up to 15MB.</p>
-          <label className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]">
+          <label className="mt-5 inline-flex cursor-pointer items-center gap-2 rounded-full bg-linear-to-r from-cyan-400 to-fuchsia-500 px-5 py-3 text-sm font-semibold text-black transition hover:scale-[1.02]">
             <UploadCloud className="h-4 w-4" />
             Choose files
             <input type="file" className="hidden" multiple onChange={onFileChange} />
@@ -168,7 +168,7 @@ export function UploadExperience() {
               Uploading files... {progress}%
             </div>
             <div className="mt-3 h-2 rounded-full bg-black/30">
-              <div className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500" style={{ width: `${progress}%` }} />
+              <div className="h-2 rounded-full bg-linear-to-r from-cyan-400 to-fuchsia-500" style={{ width: `${progress}%` }} />
             </div>
           </div>
         ) : null}
@@ -185,15 +185,15 @@ export function UploadExperience() {
       </div>
 
       <div className="grid gap-4 md:grid-cols-3">
-        <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
           <p className="text-sm text-zinc-400">Audio</p>
           <p className="mt-2 text-2xl font-semibold text-white">{summary.audio}</p>
         </div>
-        <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
           <p className="text-sm text-zinc-400">Covers</p>
           <p className="mt-2 text-2xl font-semibold text-white">{summary.image}</p>
         </div>
-        <div className="rounded-[24px] border border-white/10 bg-white/5 p-4">
+        <div className="rounded-3xl border border-white/10 bg-white/5 p-4">
           <p className="text-sm text-zinc-400">Lyrics</p>
           <p className="mt-2 text-2xl font-semibold text-white">{summary.text}</p>
         </div>
@@ -201,7 +201,7 @@ export function UploadExperience() {
 
       <div className="grid gap-4 xl:grid-cols-2">
         {uploads.map((item) => (
-          <div key={item.id} className="rounded-[24px] border border-white/10 bg-zinc-950/70 p-4 backdrop-blur-xl">
+          <div key={item.id} className="rounded-3xl border border-white/10 bg-zinc-950/70 p-4 backdrop-blur-xl">
             <div className="flex items-start justify-between gap-3">
               <div>
                 <div className="flex items-center gap-2 text-sm text-cyan-300">

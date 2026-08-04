@@ -68,7 +68,7 @@ export function PlayerShell() {
   }, [tracks.length, activeTrack]);
 
   return (
-    <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl">
+    <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 shadow-2xl shadow-black/30 backdrop-blur-2xl">
       <audio id="lyricmotion-audio" src={activeTrack.audio} preload="metadata" />
       <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-4">
@@ -82,7 +82,7 @@ export function PlayerShell() {
 
         <div className="flex-1 lg:max-w-xl">
           <div className="mb-3 h-2 rounded-full bg-white/10">
-            <div className="h-2 rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500" style={{ width: `${Math.round(progress * 100)}%` }} />
+            <div className="h-2 rounded-full bg-linear-to-r from-cyan-400 to-fuchsia-500" style={{ width: `${Math.round(progress * 100)}%` }} />
           </div>
           <div className="flex items-center justify-center gap-3">
             <button className="rounded-full border border-white/10 bg-white/5 p-3 text-zinc-300 transition hover:bg-white/10">
@@ -91,7 +91,7 @@ export function PlayerShell() {
             <button onClick={() => setCurrentIndex((value) => (value - 1 + tracks.length) % tracks.length)} className="rounded-full border border-white/10 bg-white/5 p-3 text-zinc-300 transition hover:bg-white/10">
               <SkipBack className="h-4 w-4" />
             </button>
-            <button onClick={() => setIsPlaying((value) => !value)} className="rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 p-4 text-black shadow-lg shadow-cyan-500/30">
+            <button onClick={() => setIsPlaying((value) => !value)} className="rounded-full bg-linear-to-r from-cyan-400 to-fuchsia-500 p-4 text-black shadow-lg shadow-cyan-500/30">
               {isPlaying ? <Pause className="h-5 w-5" /> : <Play className="h-5 w-5" />}
             </button>
             <button onClick={() => setCurrentIndex((value) => (value + 1) % tracks.length)} className="rounded-full border border-white/10 bg-white/5 p-3 text-zinc-300 transition hover:bg-white/10">

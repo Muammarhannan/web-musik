@@ -19,7 +19,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
   return (
     <div className="min-h-screen bg-[#050816] text-zinc-100">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row">
-        <aside className="w-full rounded-[28px] border border-white/10 bg-white/10 p-5 backdrop-blur-xl lg:w-72">
+        <aside className="w-full rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl lg:w-72">
           <div className="flex items-center gap-3">
             <div className="rounded-2xl bg-cyan-400/20 p-3 text-cyan-300">
               <Music4 className="h-6 w-6" />

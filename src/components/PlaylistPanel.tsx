@@ -31,7 +31,7 @@ export function PlaylistPanel() {
   }
 
   return (
-    <div className="rounded-[32px] border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
+    <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
       <div className="flex items-center justify-between">
         <div>
           <p className="text-sm uppercase tracking-[0.3em] text-cyan-400">Playlists</p>
@@ -42,7 +42,7 @@ export function PlaylistPanel() {
 
       <div className="mt-5 flex gap-2">
         <input value={draft} onChange={(event) => setDraft(event.target.value)} placeholder="Create a new playlist" className="flex-1 rounded-full border border-white/10 bg-white/5 px-4 py-3 text-sm text-white outline-none placeholder:text-zinc-500" />
-        <button onClick={addPlaylist} className="rounded-full bg-gradient-to-r from-cyan-400 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-black">
+        <button onClick={addPlaylist} className="rounded-full bg-linear-to-r from-cyan-400 to-fuchsia-500 px-4 py-3 text-sm font-semibold text-black">
           <PlusCircle className="h-4 w-4" />
         </button>
       </div>

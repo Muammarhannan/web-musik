@@ -2,6 +2,17 @@ import { NextRequest } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
+import { addStoredUpload, readStoredUploads } from "@/lib/data-store";
+
+type UploadResponse = {
+  id: string;
+  name: string;
+  type: "audio" | "image" | "text";
+  url: string;
+  size: number;
+  previewText?: string;
+  createdAt: string;
+};
 
 const uploadDir = path.join(process.cwd(), "public", "uploads");
 
@@ -23,18 +34,21 @@ export async function POST(request: NextRequest) {
 
     const fileType = file.type.startsWith("audio/") ? "audio" : file.type.startsWith("image/") ? "image" : "text";
     const previewText = fileType === "text" ? await file.text() : undefined;
+    const createdAt = new Date().toISOString();
 
-    return Response.json({
-      ok: true,
-      file: {
-        id: filename,
-        name: file.name,
-        type: fileType,
-        url: `/uploads/${filename}`,
-        size: file.size,
-        previewText,
-      },
-    });
+    const payload: UploadResponse = {
+      id: filename,
+      name: file.name,
+      type: fileType,
+      url: `/uploads/${filename}`,
+      size: file.size,
+      previewText,
+      createdAt,
+    };
+
+    await addStoredUpload(payload);
+
+    return Response.json({ ok: true, file: payload });
   } catch (error) {
     return Response.json({ ok: false, error: (error as Error).message }, { status: 500 });
   }

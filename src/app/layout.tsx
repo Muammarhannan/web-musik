@@ -14,17 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "LyricMotion",
-  description: "A premium music experience with immersive visuals and elegant playback.",
+  title: "PixelBeats",
+  description: "PixelBeats is a private music library with visualizers, lyrics, and listening stats.",
 };
 
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
-    <html
-      lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
-    >
-      <body className="min-h-full flex flex-col">
+    <html lang="en" className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}>
+      <body className="min-h-full flex flex-col bg-[#070a16] text-slate-100">
         <AppShell>{children}</AppShell>
       </body>
     </html>

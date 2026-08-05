@@ -1,62 +1,55 @@
 import { prisma } from "@/lib/prisma";
 
-export const SYSTEM_USER_EMAIL = "system@lyricmotion.local";
-
-export async function getOrCreateSystemUser() {
-  let user = await prisma.user.findUnique({ where: { email: SYSTEM_USER_EMAIL } });
-  if (!user) {
-    user = await prisma.user.create({
-      data: {
-        email: SYSTEM_USER_EMAIL,
-        name: "LyricMotion System",
-        image: "",
-      },
-    });
-  }
-  return user;
-}
+export type SongRecord = {
+  id: string;
+  title: string;
+  artist: string;
+  album?: string | null;
+  genre?: string | null;
+  duration?: number | null;
+  audioUrl: string;
+  coverUrl?: string | null;
+  lyricsUrl?: string | null;
+  createdAt: Date;
+};
 
 export async function createSongRecord(params: {
   title: string;
   artist: string;
-  audioUrl?: string;
-  coverUrl?: string;
-  lyricsUrl?: string;
+  audioPath: string;
+  coverPath?: string;
+  lyricsPath?: string;
   genre?: string;
   duration?: number;
 }) {
-  const user = await getOrCreateSystemUser();
   return prisma.song.create({
     data: {
       title: params.title,
       artist: params.artist,
-      album: params.title,
-      genre: params.genre ?? "Electronic",
-      audioUrl: params.audioUrl,
-      coverUrl: params.coverUrl,
-      lyricsUrl: params.lyricsUrl,
+      genre: params.genre,
+      audio_path: params.audioPath,
+      cover_path: params.coverPath,
+      lyrics_path: params.lyricsPath,
       duration: params.duration,
-      userId: user.id,
     },
   });
 }
 
 export async function getSongs() {
-  return prisma.song.findMany({
-    orderBy: { createdAt: "desc" },
+  const songs = await prisma.song.findMany({
+    orderBy: { created_at: "desc" },
   });
-}
 
-export async function createLyricsRecord(params: {
-  title: string;
-  content: string;
-  format: string;
-}) {
-  return prisma.lyrics.create({
-    data: {
-      title: params.title,
-      content: params.content,
-      format: params.format,
-    },
-  });
+  return songs.map((song) => ({
+    id: song.id,
+    title: song.title,
+    artist: song.artist,
+    album: song.album,
+    genre: song.genre,
+    duration: song.duration,
+    audioUrl: song.audio_path,
+    coverUrl: song.cover_path,
+    lyricsUrl: song.lyrics_path,
+    createdAt: song.created_at,
+  }));
 }

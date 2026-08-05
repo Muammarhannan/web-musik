@@ -1,39 +1,40 @@
 "use client";
 
 import Link from "next/link";
-import { Compass, Heart, History, Library, Music4, Radio, Settings, Sparkles, Upload, UserRound } from "lucide-react";
+import { BarChart3, Home, Music2, Settings, Sparkles, Upload } from "lucide-react";
 
 const navItems = [
-  { label: "Home", href: "/", icon: Sparkles },
-  { label: "Discover", href: "/dashboard", icon: Compass },
+  { label: "Home", href: "/", icon: Home },
+  { label: "Library", href: "/library", icon: Music2 },
+  { label: "Player", href: "/player", icon: Sparkles },
+  { label: "Statistics", href: "/statistics", icon: BarChart3 },
+  { label: "Settings", href: "/settings", icon: Settings },
   { label: "Upload", href: "/upload", icon: Upload },
-  { label: "Library", href: "/player", icon: Library },
-  { label: "Immersive", href: "/immersive", icon: Radio },
-  { label: "Favorite", href: "/", icon: Heart },
-  { label: "History", href: "/", icon: History },
-  { label: "Profile", href: "/", icon: UserRound },
-  { label: "Settings", href: "/", icon: Settings },
 ];
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#050816] text-zinc-100">
+    <div className="min-h-screen bg-[#0b1224] text-slate-100">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row">
-        <aside className="w-full rounded-3xl border border-white/10 bg-white/10 p-5 backdrop-blur-xl lg:w-72">
+        <aside className="w-full rounded-[32px] border border-white/10 bg-slate-950/50 p-5 shadow-2xl shadow-black/20 backdrop-blur-2xl lg:w-72">
           <div className="flex items-center gap-3">
-            <div className="rounded-2xl bg-cyan-400/20 p-3 text-cyan-300">
-              <Music4 className="h-6 w-6" />
+            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-gradient-to-br from-sky-400/30 to-fuchsia-500/30 text-sky-200 shadow-inner shadow-sky-500/20">
+              <Sparkles className="h-6 w-6" />
             </div>
             <div>
-              <p className="text-lg font-semibold">LyricMotion</p>
-              <p className="text-sm text-zinc-400">Immersive audio</p>
+              <p className="text-lg font-semibold text-white">PixelBeats</p>
+              <p className="text-sm text-slate-400">My private music library</p>
             </div>
           </div>
-          <nav className="mt-6 space-y-2">
+          <nav className="mt-8 space-y-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               return (
-                <Link key={item.label} href={item.href} className="flex items-center gap-3 rounded-2xl px-4 py-3 text-sm text-zinc-300 transition hover:bg-white/10 hover:text-white">
+                <Link
+                  key={item.label}
+                  href={item.href}
+                  className="flex items-center gap-3 rounded-3xl px-4 py-3 text-sm text-slate-300 transition hover:bg-white/10 hover:text-white"
+                >
                   <Icon className="h-4 w-4" />
                   {item.label}
                 </Link>
@@ -41,7 +42,7 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
         </aside>
-        <div className="flex-1">{children}</div>
+        <main className="flex-1">{children}</main>
       </div>
     </div>
   );

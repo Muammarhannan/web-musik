@@ -48,7 +48,6 @@ export function UploadExperience() {
     const stored = readUploads();
     if (stored.length > 0) {
       setUploads(stored);
-      return;
     }
 
     void loadUploads();
@@ -58,7 +57,9 @@ export function UploadExperience() {
     const response = await fetch("/api/uploads");
     if (!response.ok) return;
     const data = (await response.json()) as { files: UploadItem[] };
-    const normalized = data.files.map((item) => ({ ...item, createdAt: item.createdAt ?? new Date().toISOString() }));
+    const normalized = data.files
+      .map((item) => ({ ...item, createdAt: item.createdAt ?? new Date().toISOString() }))
+      .filter((item, index, all) => all.findIndex((current) => current.id === item.id) === index);
     setUploads(normalized);
     writeUploads(normalized);
   }
@@ -157,7 +158,9 @@ export function UploadExperience() {
     const uploadedFiles = Array.isArray(payload.files) ? payload.files : [];
     if (uploadedFiles.length) {
       setUploads((current) => {
-        const next = [...uploadedFiles, ...current];
+        const next = [...uploadedFiles, ...current].filter(
+          (item, index, all) => all.findIndex((current) => current.id === item.id) === index,
+        );
         writeUploads(next);
         return next;
       });

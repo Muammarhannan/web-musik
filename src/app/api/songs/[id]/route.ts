@@ -1,5 +1,6 @@
 import { NextRequest } from "next/server";
 import { prisma } from "@/lib/prisma";
+import { removeStoredUploadsByUrls, deleteStoredUploadFiles } from "@/lib/data-store";
 
 export async function PATCH(request: NextRequest, context: { params: Promise<{ id: string }> }) {
   const params = await context.params;
@@ -44,7 +45,20 @@ export async function DELETE(request: NextRequest, context: { params: Promise<{ 
       return Response.json({ ok: false, error: "Song ID tidak valid." }, { status: 400 });
     }
 
+    const song = await prisma.song.findUnique({ where: { id: params.id } });
+    if (!song) {
+      return Response.json({ ok: false, error: "Song tidak ditemukan." }, { status: 404 });
+    }
+
     await prisma.song.delete({ where: { id: params.id } });
+
+    const urlsToRemove = [song.audioUrl, song.coverUrl, song.lyricsUrl].filter(
+      (url): url is string => typeof url === "string" && url.length > 0,
+    );
+
+    await deleteStoredUploadFiles(urlsToRemove);
+    await removeStoredUploadsByUrls(urlsToRemove);
+
     return Response.json({ ok: true });
   } catch (error) {
     const message = error instanceof Error ? error.message : "Failed to delete song.";

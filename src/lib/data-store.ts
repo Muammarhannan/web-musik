@@ -13,6 +13,7 @@ type UploadMetadata = {
 
 const dataPath = path.join(process.cwd(), "data");
 const uploadsPath = path.join(dataPath, "uploads.json");
+const uploadDir = path.join(process.cwd(), "public", "uploads");
 
 async function ensureDataPath() {
   await fs.mkdir(dataPath, { recursive: true });
@@ -45,4 +46,28 @@ export async function addStoredUpload(item: UploadMetadata) {
   const next = [item, ...current.filter((existing) => existing.id !== item.id)];
   await writeStoredUploads(next);
   return item;
+}
+
+export async function removeStoredUploadsByUrls(urls: string[]) {
+  const current = await readStoredUploads();
+  const next = current.filter((item) => !urls.includes(item.url));
+  if (next.length !== current.length) {
+    await writeStoredUploads(next);
+  }
+  return next;
+}
+
+export async function deleteStoredUploadFiles(urls: string[]) {
+  const normalizedUrls = urls.filter((url) => typeof url === "string" && url.startsWith("/uploads/"));
+  await Promise.all(
+    normalizedUrls.map(async (url) => {
+      const filename = url.replace("/uploads/", "");
+      const filePath = path.join(uploadDir, filename);
+      try {
+        await fs.unlink(filePath);
+      } catch {
+        // Ignore missing or inaccessible files.
+      }
+    }),
+  );
 }

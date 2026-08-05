@@ -33,8 +33,41 @@ async function writeJsonFile<T>(filePath: string, data: T) {
   await fs.writeFile(filePath, JSON.stringify(data, null, 2), "utf-8");
 }
 
+async function fileExists(filePath: string) {
+  try {
+    await fs.stat(filePath);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+async function cleanupStoredUploads(items: UploadMetadata[]) {
+  const next = [] as UploadMetadata[];
+  for (const item of items) {
+    if (typeof item.url !== "string") {
+      continue;
+    }
+
+    const normalizedUrl = item.url.startsWith("/uploads/") ? item.url : `/uploads/${item.url}`;
+    const filename = path.basename(normalizedUrl);
+    const filePath = path.join(uploadDir, filename);
+
+    if (await fileExists(filePath)) {
+      next.push(item);
+    }
+  }
+
+  if (next.length !== items.length) {
+    await writeStoredUploads(next);
+  }
+
+  return next;
+}
+
 export async function readStoredUploads(): Promise<UploadMetadata[]> {
-  return readJsonFile<UploadMetadata[]>(uploadsPath, []);
+  const uploads = await readJsonFile<UploadMetadata[]>(uploadsPath, []);
+  return cleanupStoredUploads(uploads);
 }
 
 export async function writeStoredUploads(items: UploadMetadata[]) {

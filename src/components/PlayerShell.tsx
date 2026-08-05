@@ -2,7 +2,6 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { Pause, Play, SkipBack, SkipForward, Repeat2, Shuffle, Volume2, ListMusic, Maximize2 } from "lucide-react";
-import { getAudioItems, parseLyrics, readUploads, type LibraryItem } from "@/lib/local-library";
 
 type Track = {
   id: string;
@@ -23,18 +22,24 @@ export function PlayerShell() {
   const [volume, setVolume] = useState(0.8);
 
   useEffect(() => {
-    const uploads = readUploads();
-    const audioItems = getAudioItems(uploads);
-    const nextTracks = audioItems.map((item, index) => ({
-      id: item.id,
-      title: item.name.replace(/\.[^/.]+$/, ""),
-      artist: "Local Library",
-      cover: fallbackCover,
-      audio: item.url,
-      lyrics: item.previewText ?? "",
-    }));
+    async function loadSongs() {
+      const response = await fetch("/api/songs");
+      if (!response.ok) return;
+      const data = (await response.json()) as { songs: Array<{ id: string; title: string; artist: string; audioUrl?: string; coverUrl?: string }> };
+      const nextTracks = data.songs
+        .filter((song) => song.audioUrl)
+        .map((song) => ({
+          id: song.id,
+          title: song.title,
+          artist: song.artist,
+          cover: song.coverUrl ?? fallbackCover,
+          audio: song.audioUrl ?? "",
+          lyrics: "",
+        }));
+      setTracks(nextTracks);
+    }
 
-    setTracks(nextTracks.length > 0 ? nextTracks : []);
+    void loadSongs();
   }, []);
 
   const activeTrack = useMemo(() => tracks[currentIndex] ?? tracks[0], [currentIndex, tracks]);

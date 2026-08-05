@@ -2,7 +2,8 @@ import { NextRequest } from "next/server";
 import { writeFile, mkdir } from "fs/promises";
 import path from "path";
 import { randomUUID } from "crypto";
-import { addStoredUpload, readStoredUploads } from "@/lib/data-store";
+import { addStoredUpload } from "@/lib/data-store";
+import { createSongRecord, createLyricsRecord } from "@/lib/song-service";
 
 type UploadResponse = {
   id: string;
@@ -47,6 +48,27 @@ export async function POST(request: NextRequest) {
     };
 
     await addStoredUpload(payload);
+
+    try {
+      if (fileType === "audio") {
+        await createSongRecord({
+          title: file.name.replace(/\.[^/.]+$/, ""),
+          artist: "Local Upload",
+          audioUrl: payload.url,
+          genre: "Electronica",
+        });
+      }
+
+      if (fileType === "text" && previewText) {
+        await createLyricsRecord({
+          title: file.name.replace(/\.[^/.]+$/, ""),
+          content: previewText,
+          format: path.extname(file.name).replace(".", "") || "txt",
+        });
+      }
+    } catch {
+      // Persist upload metadata regardless of database availability.
+    }
 
     return Response.json({ ok: true, file: payload });
   } catch (error) {

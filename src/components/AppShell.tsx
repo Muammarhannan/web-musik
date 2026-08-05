@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { BarChart3, Home, Music2, Settings, Sparkles, Upload } from "lucide-react";
+import { PlayerShell } from "@/components/PlayerShell";
 
 const navItems = [
   { label: "Home", href: "/", icon: Home },
@@ -14,11 +15,11 @@ const navItems = [
 
 export function AppShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="min-h-screen bg-[#0b1224] text-slate-100">
+    <div className="min-h-screen bg-[var(--background)] text-[var(--foreground)]">
       <div className="mx-auto flex max-w-7xl flex-col gap-4 px-4 py-4 lg:flex-row">
         <aside className="w-full rounded-[32px] border border-white/10 bg-slate-950/50 p-5 shadow-2xl shadow-black/20 backdrop-blur-2xl lg:w-72">
           <div className="flex items-center gap-3">
-            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-gradient-to-br from-sky-400/30 to-fuchsia-500/30 text-sky-200 shadow-inner shadow-sky-500/20">
+            <div className="flex h-14 w-14 items-center justify-center rounded-3xl bg-white/10 text-slate-100 shadow-inner shadow-black/20">
               <Sparkles className="h-6 w-6" />
             </div>
             <div>
@@ -42,7 +43,10 @@ export function AppShell({ children }: { children: React.ReactNode }) {
             })}
           </nav>
         </aside>
-        <main className="flex-1">{children}</main>
+        <main className="flex-1 pb-28">{children}</main>
+      </div>
+      <div className="sticky bottom-0 z-20 border-t border-white/10 bg-slate-950/95 p-4 backdrop-blur-2xl">
+        <PlayerShell />
       </div>
     </div>
   );

@@ -1,12 +1,23 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Palette } from "lucide-react";
 
 const themes = ["Midnight", "Aurora", "Ocean", "Sakura", "Cyberpunk", "Dream"];
 
 export function ThemeSelector() {
   const [activeTheme, setActiveTheme] = useState("Midnight");
+
+  useEffect(() => {
+    const stored = typeof window !== "undefined" ? window.localStorage.getItem("pixelbeats-theme") : null;
+    if (stored) setActiveTheme(stored);
+  }, []);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.localStorage.setItem("pixelbeats-theme", activeTheme);
+    document.documentElement.dataset.theme = activeTheme.toLowerCase();
+  }, [activeTheme]);
 
   return (
     <div className="rounded-4xl border border-white/10 bg-zinc-950/70 p-6 backdrop-blur-2xl">
@@ -16,7 +27,7 @@ export function ThemeSelector() {
       </div>
       <div className="mt-5 grid gap-3 md:grid-cols-3">
         {themes.map((theme) => (
-          <button key={theme} onClick={() => setActiveTheme(theme)} className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${activeTheme === theme ? "border-cyan-400 bg-cyan-400/10 text-white" : "border-white/10 bg-white/5 text-zinc-400"}`}>
+          <button key={theme} onClick={() => setActiveTheme(theme)} className={`rounded-2xl border px-4 py-3 text-left text-sm transition ${activeTheme === theme ? "border-white/20 bg-white/10 text-white" : "border-white/10 bg-white/5 text-zinc-400"}`}>
             {theme}
           </button>
         ))}

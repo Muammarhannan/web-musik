@@ -7,37 +7,58 @@ export type SongRecord = {
   album?: string | null;
   genre?: string | null;
   duration?: number | null;
-  audioUrl: string;
+  audioUrl?: string | null;
   coverUrl?: string | null;
   lyricsUrl?: string | null;
-  createdAt: Date;
+  createdAt: string;
+  updatedAt: string;
+  userId: string;
 };
+
+const LOCAL_USER_ID = "local-user";
 
 export async function createSongRecord(params: {
   title: string;
   artist: string;
+  album?: string;
   audioPath: string;
   coverPath?: string;
   lyricsPath?: string;
   genre?: string;
   duration?: number;
+  userId?: string;
 }) {
+  await prisma.user.upsert({
+    where: { id: params.userId ?? LOCAL_USER_ID },
+    update: {},
+    create: {
+      id: params.userId ?? LOCAL_USER_ID,
+      email: `${params.userId ?? LOCAL_USER_ID}@pixelbeats.local`,
+      name: "Local listener",
+      createdAt: new Date(),
+      updatedAt: new Date(),
+    },
+  });
+
   return prisma.song.create({
     data: {
       title: params.title,
       artist: params.artist,
+      album: params.album,
       genre: params.genre,
-      audio_path: params.audioPath,
-      cover_path: params.coverPath,
-      lyrics_path: params.lyricsPath,
+      audioUrl: params.audioPath,
+      coverUrl: params.coverPath,
+      lyricsUrl: params.lyricsPath,
       duration: params.duration,
+      userId: params.userId ?? LOCAL_USER_ID,
+      updatedAt: new Date(),
     },
   });
 }
 
 export async function getSongs() {
   const songs = await prisma.song.findMany({
-    orderBy: { created_at: "desc" },
+    orderBy: { createdAt: "desc" },
   });
 
   return songs.map((song) => ({
@@ -47,9 +68,11 @@ export async function getSongs() {
     album: song.album,
     genre: song.genre,
     duration: song.duration,
-    audioUrl: song.audio_path,
-    coverUrl: song.cover_path,
-    lyricsUrl: song.lyrics_path,
-    createdAt: song.created_at,
+    audioUrl: song.audioUrl ?? undefined,
+    coverUrl: song.coverUrl ?? undefined,
+    lyricsUrl: song.lyricsUrl ?? undefined,
+    createdAt: song.createdAt.toISOString(),
+    updatedAt: song.updatedAt.toISOString(),
+    userId: song.userId,
   }));
 }

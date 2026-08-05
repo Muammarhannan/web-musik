@@ -1,22 +1,42 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { Search, Sparkles } from "lucide-react";
 
-const catalog = [
-  { title: "Velvet Stars", artist: "Mina", genre: "Dreamwave" },
-  { title: "Neon Drift", artist: "Aster", genre: "Synth" },
-  { title: "Midnight Pulse", artist: "Liora", genre: "Ambient" },
+type SongItem = {
+  id: string;
+  title: string;
+  artist: string;
+  album?: string | null;
+  genre?: string | null;
+};
+
+const fallbackCatalog: SongItem[] = [
+  { id: "1", title: "Velvet Stars", artist: "Mina", genre: "Dreamwave" },
+  { id: "2", title: "Neon Drift", artist: "Aster", genre: "Synth" },
+  { id: "3", title: "Midnight Pulse", artist: "Liora", genre: "Ambient" },
 ];
 
 export function SearchRecommendations() {
   const [query, setQuery] = useState("");
+  const [songs, setSongs] = useState<SongItem[]>(fallbackCatalog);
+
+  useEffect(() => {
+    async function loadSongs() {
+      const response = await fetch("/api/songs");
+      if (!response.ok) return;
+      const data = (await response.json()) as { songs: SongItem[] };
+      setSongs(data.songs);
+    }
+
+    void loadSongs();
+  }, []);
 
   const results = useMemo(() => {
-    const value = query.toLowerCase();
-    if (!value) return catalog;
-    return catalog.filter((item) => `${item.title} ${item.artist} ${item.genre}`.toLowerCase().includes(value));
-  }, [query]);
+    const value = query.toLowerCase().trim();
+    if (!value) return songs.length > 0 ? songs : fallbackCatalog;
+    return songs.filter((item) => `${item.title} ${item.artist} ${item.album ?? ""} ${item.genre ?? ""}`.toLowerCase().includes(value));
+  }, [query, songs]);
 
   return (
     <div className="grid gap-6 xl:grid-cols-[1.1fr_0.9fr]">
@@ -31,9 +51,9 @@ export function SearchRecommendations() {
         </div>
         <div className="mt-5 space-y-3">
           {results.map((item) => (
-            <div key={item.title} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
+            <div key={`${item.title}-${item.artist}`} className="rounded-2xl border border-white/10 bg-white/5 px-4 py-3">
               <p className="font-medium text-white">{item.title}</p>
-              <p className="text-sm text-zinc-400">{item.artist} • {item.genre}</p>
+              <p className="text-sm text-zinc-400">{item.artist} • {item.genre ?? "Unknown"} {item.album ? `• ${item.album}` : ""}</p>
             </div>
           ))}
         </div>

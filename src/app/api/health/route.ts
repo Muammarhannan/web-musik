@@ -1,3 +1,3 @@
 export async function GET() {
-  return Response.json({ status: "ok", app: "lyricmotion" });
+  return Response.json({ status: "ok", app: "PixelBeats" });
 }

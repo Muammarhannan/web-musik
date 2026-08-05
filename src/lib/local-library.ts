@@ -17,8 +17,8 @@ export type PlaylistItem = {
   createdAt: string;
 };
 
-const UPLOADS_KEY = "lyricmotion-uploads";
-const PLAYLISTS_KEY = "lyricmotion-playlists";
+const UPLOADS_KEY = "pixelbeats-uploads";
+const PLAYLISTS_KEY = "pixelbeats-playlists";
 
 export function readUploads(): LibraryItem[] {
   if (typeof window === "undefined") {

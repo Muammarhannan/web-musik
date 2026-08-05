@@ -1,8 +1,30 @@
 @import "tailwindcss";
 
+html, :host {
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #070a12;
+  --foreground: #f8fafc;
+  --surface: rgba(15, 23, 42, 0.92);
+  --surface-soft: rgba(15, 23, 42, 0.72);
+  --accent: #f8fafc;
+  --accent-strong: #ffffff;
+}
+
+html[data-theme="midnight"],
+html[data-theme="aurora"],
+html[data-theme="ocean"],
+html[data-theme="sakura"],
+html[data-theme="cyberpunk"],
+html[data-theme="dream"] {
+  --background: #070a12;
+  --foreground: #f8fafc;
+  --surface: rgba(15, 23, 42, 0.92);
+  --accent: #f8fafc;
+  --accent-strong: #ffffff;
 }
 
 @theme inline {
@@ -12,15 +34,9 @@
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
-}
-
 body {
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: var(--font-sans), system-ui, sans-serif;
+  transition: background 0.35s ease, color 0.35s ease;
 }
